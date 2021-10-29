@@ -41,7 +41,7 @@ export class Rover{
         }
     }
     reportPosition() : string {
-        let result = this.posX + ' ' + this.posY
+        let result = this.posX + ' ' + this.posY + ' ' + this.direction
         return this.lost === null ? result: result +' ' + this.lost
     }
 
@@ -102,6 +102,5 @@ export class Rover{
         }
         this.direction = this.COORDINATES[this.directionIndex]
     }
-
 
 }
