@@ -48,18 +48,29 @@ export class Rover{
     private moveForward() {
 
         if (this.direction === 'N') {
-            this.posY++
+            this.posY = this.evaluateNewPosition(this.posY, Mars.maxDimensionY,1)
         }
         if (this.direction === 'E') {
-            this.posX++
+            this.posX =  this.evaluateNewPosition(this.posX, Mars.maxDimensionX,1)
         }
         if (this.direction === 'S') {
-            this.posY--
+            this.posY = this.evaluateNewPosition(this.posY, 0,-1)
         }
         if (this.direction === 'W') {
-            this.posX--
+            this.posX = this.evaluateNewPosition(this.posX, 0,-1)
         }
-        this.evaluateIfItWasLost()
+    }
+
+    private evaluateNewPosition(pos:number, maxDimension:number,movementIndex: number):number {
+        if(pos === maxDimension){
+            this.lost = "LOST"
+            let position = [this.posX, this.posY]
+            // @ts-ignore
+            Mars.lostRoverPositions.push(position) // for what make it easy if we can make it hard...
+            return pos
+        }else{
+            return pos+movementIndex
+        }
     }
 
     private turnLeft() {
@@ -79,13 +90,4 @@ export class Rover{
     }
 
 
-    private evaluateIfItWasLost() {
-        if(this.posX > Mars.maxDimensionX || this.posX < 0 ||
-            this.posY > Mars.maxDimensionY || this.posY < 0 ){
-            this.lost = "LOST"
-            let position = [this.posX, this.posY]
-            // @ts-ignore
-            Mars.lostRoverPositions.push(position) // for what make it easy if we can make it hard...
-        }
-    }
 }
