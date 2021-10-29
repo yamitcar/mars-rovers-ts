@@ -1,8 +1,5 @@
 export class Rover{
     orders: string;
-
-    maxMarsDimensionX: number
-    maxMarsDimensionY: number
     direction: string
 
     posX: number;
@@ -11,11 +8,8 @@ export class Rover{
     private directionIndex: number
     private COORDINATES = ['N','E','S','W']
 
-    constructor(marsDimensions: string, initPosition: string, orders: string){
-        marsDimensions = marsDimensions.replace(/\s/g, "")
+    constructor( initPosition: string, orders: string){
         initPosition = initPosition.replace(/\s/g, "")
-        this.maxMarsDimensionX = Number(marsDimensions[0])
-        this.maxMarsDimensionY = Number(marsDimensions[1])
         this.posX = Number(initPosition[0])
         this.posY = Number(initPosition[1])
         this.direction = initPosition[2]
@@ -35,6 +29,25 @@ export class Rover{
         }
         if(instruction === "L"){
             this.turnLeft();
+        }
+        if(instruction === 'F'){
+            this.moveForward();
+        }
+    }
+
+    private moveForward() {
+
+        if (this.direction === 'N') {
+            this.posY++
+        }
+        if (this.direction === 'E') {
+            this.posX++
+        }
+        if (this.direction === 'S') {
+            this.posY--
+        }
+        if (this.direction === 'W') {
+            this.posX--
         }
     }
 
