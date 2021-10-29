@@ -1,9 +1,12 @@
+import Mars from "./mars";
+
 export class Rover{
     orders: string;
     direction: string
 
-    posX: number;
-    posY: number;
+    posX: number
+    posY: number
+    lost: string|null
 
     private directionIndex: number
     private COORDINATES = ['N','E','S','W']
@@ -14,6 +17,7 @@ export class Rover{
         this.posY = Number(initPosition[1])
         this.direction = initPosition[2]
         this.directionIndex = this.COORDINATES.indexOf(this.direction)
+        this.lost = null
         this.orders = orders
     }
 
@@ -24,15 +28,21 @@ export class Rover{
     }
 
     move(instruction: string) {
-        if(instruction === "R"){
-            this.turnRight();
+        if(!this.lost){
+            if(instruction === "R"){
+                this.turnRight();
+            }
+            if(instruction === "L"){
+                this.turnLeft();
+            }
+            if(instruction === 'F'){
+                this.moveForward();
+            }
         }
-        if(instruction === "L"){
-            this.turnLeft();
-        }
-        if(instruction === 'F'){
-            this.moveForward();
-        }
+    }
+    reportPosition() : string{
+        let result = this.posX + ' ' + this.posY
+        return this.lost === null ? result: result +' ' + this.lost
     }
 
     private moveForward() {
@@ -49,6 +59,7 @@ export class Rover{
         if (this.direction === 'W') {
             this.posX--
         }
+        this.evaluateIfItWasLost()
     }
 
     private turnLeft() {
@@ -68,4 +79,13 @@ export class Rover{
     }
 
 
+    private evaluateIfItWasLost() {
+        if(this.posX > Mars.maxDimensionX || this.posX < 0 ||
+            this.posY > Mars.maxDimensionY || this.posY < 0 ){
+            this.lost = "LOST"
+            let position = [this.posX, this.posY]
+            // @ts-ignore
+            Mars.lostRoverPositions.push(position) // for what make it easy if we can make it hard...
+        }
+    }
 }
