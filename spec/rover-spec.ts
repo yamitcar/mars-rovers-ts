@@ -115,13 +115,37 @@ describe("Mars Rover", ()=> {
         expect(Mars.lostRoverPositions[0]).toEqual([0,1])
     });
 
-    // it('if LOST Should ignore other orders', () => {
-    //     Mars.createPlanet("1 1")
-    //     rover = new Rover( "1 1 W", "FFFFFFF")
-    //     rover.executeOrders()
-    //     expect(rover.reportPosition()).toEqual("-1 1 LOST")
-    //     expect(Mars.lostRoverPositions.length).toEqual(1)
-    //     expect(Mars.lostRoverPositions[0]).toEqual([-1,1])
-    // });
+    it('if LOST Should ignore other orders', () => {
+        Mars.createPlanet("1 1")
+        rover = new Rover( "1 1 W", "FFFFFFF")
+        rover.executeOrders()
+        expect(rover.reportPosition()).toEqual("0 1 LOST")
+        expect(Mars.lostRoverPositions.length).toEqual(1)
+        expect(Mars.lostRoverPositions[0]).toEqual([0,1])
+    });
+
+    it('if a rover was LOST Should ignore the order', () => {
+        Mars.createPlanet("1 1")
+        rover = new Rover( "1 1 W", "FF")
+        rover.executeOrders()
+        expect(rover.reportPosition()).toEqual("0 1 LOST")
+
+        rover = new Rover( "1 1 W", "FF")
+        rover.executeOrders()
+        expect(rover.reportPosition()).toEqual("0 1")
+
+    });
+
+    it('if a rover was LOST Should ignore the order and continue with the others', () => {
+        Mars.createPlanet("2 2")
+        rover = new Rover( "1 1 N", "FF")
+        rover.executeOrders()
+        expect(rover.reportPosition()).toEqual("1 2 LOST")
+
+        rover = new Rover( "0 0 E", "FLFFFRF")
+        rover.executeOrders()
+        expect(rover.reportPosition()).toEqual("2 2")
+
+    });
 
 });

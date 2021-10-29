@@ -40,7 +40,7 @@ export class Rover{
             }
         }
     }
-    reportPosition() : string{
+    reportPosition() : string {
         let result = this.posX + ' ' + this.posY
         return this.lost === null ? result: result +' ' + this.lost
     }
@@ -63,14 +63,28 @@ export class Rover{
 
     private evaluateNewPosition(pos:number, maxDimension:number,movementIndex: number):number {
         if(pos === maxDimension){
-            this.lost = "LOST"
             let position = [this.posX, this.posY]
-            // @ts-ignore
-            Mars.lostRoverPositions.push(position) // for what make it easy if we can make it hard...
-            return pos
+            if(this.someOneWasLostHere(position)){//ignore the instruction
+                return pos
+            }else { //lost rover
+                this.lost = "LOST"
+                // @ts-ignore
+                Mars.lostRoverPositions.push(position) // for what make it easy if we can make it hard...
+                return pos
+            }
         }else{
             return pos+movementIndex
         }
+    }
+
+    private someOneWasLostHere(position: number[]) {
+        for(let  i = 0; i < Mars.lostRoverPositions.length; i++){
+            // @ts-ignore
+            if(Mars.lostRoverPositions[i][1] === position[1] && Mars.lostRoverPositions[i][0] === position[0]){
+                return true
+            }
+        }
+        return false
     }
 
     private turnLeft() {
